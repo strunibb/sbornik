@@ -1,0 +1,3484 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сборник лучших песен</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --dark: #0f172a;
+            --darker: #0c1120;
+            --light: #e2e8f0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        .header-title {
+            font-family: 'Montserrat', sans-serif;
+            text-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #f472b6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+        
+        .subtitle {
+            font-family: 'Raleway', sans-serif;
+            font-weight: 300;
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            max-width: 600px;
+            opacity: 0.9;
+        }
+        
+        .rhythm-tab {
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 12px;
+            margin: 0 8px 12px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 14px 28px;
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .rhythm-tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(99, 102, 241, 0.3), transparent);
+            transition: width 0.5s ease;
+            z-index: -1;
+        }
+        
+        .rhythm-tab:hover::before {
+            width: 100%;
+        }
+        
+        .rhythm-tab.active {
+            background: linear-gradient(90deg, rgba(99, 102, 241, 0.3), rgba(139, 92, 246, 0.3));
+            color: white;
+            box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);
+            border-color: var(--primary);
+        }
+        
+        .song-item {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: fadeIn 0.6s ease-out;
+            border: 1px solid rgba(99, 102, 241, 0.15);
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .song-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(15, 23, 42, 0.8));
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        
+        .song-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -10px rgba(99, 102, 241, 0.3);
+            border-color: rgba(139, 92, 246, 0.4);
+        }
+        
+        .song-item:hover::before {
+            opacity: 1;
+        }
+        
+        .song-item.selected {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(139, 92, 246, 0.25));
+            border-color: #8b5cf6;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+        }
+        
+        .guitar-icon {
+            transition: all 0.4s ease;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 12px;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .song-item:hover .guitar-icon {
+            transform: rotate(10deg) scale(1.1);
+            background: rgba(99, 102, 241, 0.25);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.2);
+        }
+        
+        .cart-container {
+            border-top: 3px solid var(--primary);
+            background: rgba(15, 23, 42, 0.8);
+            box-shadow: 0 20px 50px -20px rgba(0,0,0,0.5);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .cart-item {
+            transition: all 0.3s ease;
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 14px;
+        }
+        
+        .remove-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .remove-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+            transform: scale(1.15);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
+        
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        .animate-pulse-custom {
+            animation: pulse 3s infinite;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            padding: 18px 28px;
+            border-radius: 14px;
+            background: linear-gradient(90deg, #10b981, #06b6d4);
+            color: white;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transform: translateX(120%);
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .song-title {
+            position: relative;
+            display: inline-block;
+            font-weight: 700;
+            font-size: 1.3rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .song-title::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.4s ease;
+        }
+        
+        .song-item:hover .song-title::after {
+            width: 100%;
+        }
+        
+        .song-artist {
+            font-size: 1rem;
+            color: #a3bffa;
+            font-weight: 500;
+            letter-spacing: 0.2px;
+        }
+        
+        .floating-guitar {
+            position: absolute;
+            opacity: 0.07;
+            z-index: -1;
+            filter: blur(1px);
+        }
+        
+        .song-list-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 24px;
+        }
+        
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 40px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 2rem;
+            padding-bottom: 12px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            border-radius: 4px;
+        }
+        
+        .song-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+        }
+        
+        .contact-input {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            color: white;
+            padding: 16px 20px;
+            border-radius: 14px;
+            transition: all 0.4s ease;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+        }
+        
+        .contact-input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.2);
+            background: rgba(30, 41, 59, 0.9);
+        }
+        
+        .contact-input::placeholder {
+            color: #94a3b8;
+            font-weight: 300;
+        }
+        
+        .rhythm-indicator {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 10px;
+            box-shadow: 0 0 8px currentColor;
+        }
+        
+        .rhythm-four { background-color: var(--primary); }
+        .rhythm-six { background-color: var(--secondary); }
+        .rhythm-eight { background-color: #10b981; }
+        .rhythm-reggae { background-color: #f59e0b; }
+        .rhythm-bossa { background-color: var(--accent); }
+        
+        /* Glass effect */
+        .glass {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(99, 102, 241, 0.15);
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            border: 2px solid var(--darker);
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, var(--secondary), var(--accent));
+        }
+        
+        /* Floating notes animation */
+        @keyframes floatNote {
+            0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-100vh) translateX(20vw) rotate(360deg); opacity: 0; }
+        }
+        
+        .music-note {
+            position: absolute;
+            font-size: 1.8rem;
+            opacity: 0;
+            z-index: -1;
+            animation: floatNote 8s linear infinite;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .rhythm-tab {
+                padding: 12px 20px;
+                font-size: 0.95rem;
+                margin: 0 4px 8px;
+            }
+            .song-grid {
+                grid-template-columns: 1fr;
+            }
+            .section-title {
+                font-size: 1.7rem;
+                margin-bottom: 30px;
+            }
+        }
+        
+        /* Decorative elements */
+        .decorative-circle {
+            position: absolute;
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(40px);
+            opacity: 0.15;
+        }
+        
+        .circle-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--primary);
+            top: -100px;
+            right: -100px;
+        }
+        
+        .circle-2 {
+            width: 300px;
+            height: 300px;
+            background: var(--accent);
+            bottom: -100px;
+            left: -80px;
+        }
+        
+        /* Search bar */
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 40px;
+            position: relative;
+        }
+        
+        .search-box {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            color: white;
+            padding: 15px 25px 15px 50px;
+            border-radius: 50px;
+            transition: all 0.4s ease;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            width: 100%;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .search-box:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.2);
+            background: rgba(30, 41, 59, 0.9);
+        }
+        
+        .search-box::placeholder {
+            color: #94a3b8;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 1.2rem;
+        }
+        
+        .clear-search {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: color 0.3s;
+        }
+        
+        .clear-search:hover {
+            color: #e2e8f0;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 40px 0;
+            font-size: 1.2rem;
+            color: #94a3b8;
+        }
+        
+        .no-results i {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #6366f1;
+        }
+        
+        .highlight {
+            background-color: rgba(236, 72, 153, 0.3);
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="py-8 relative overflow-x-hidden">
+    <!-- Animated music notes -->
+    <div class="music-note" style="top: 10%; left: 5%; animation-delay: 0s; color: #6366f1;"><i class="fas fa-music"></i></div>
+    <div class="music-note" style="top: 20%; left: 15%; animation-delay: 1s; color: #8b5cf6;"><i class="fas fa-music"></i></div>
+    <div class="music-note" style="top: 5%; left: 85%; animation-delay: 2s; color: #ec4899;"><i class="fas fa-music"></i></div>
+    <div class="music-note" style="top: 40%; left: 90%; animation-delay: 3s; color: #10b981;"><i class="fas fa-music"></i></div>
+    <div class="music-note" style="top: 70%; left: 10%; animation-delay: 4s; color: #f59e0b;"><i class="fas fa-music"></i></div>
+    
+    <!-- Decorative circles -->
+    <div class="decorative-circle circle-1"></div>
+    <div class="decorative-circle circle-2"></div>
+    
+    <div class="container mx-auto px-4 max-w-6xl relative z-10">
+        <header class="mb-16 text-center">
+            <div class="flex justify-center mb-6">
+                <div class="glass p-5 rounded-2xl shadow-xl animate-float inline-flex">
+                    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 p-5 rounded-full">
+                        <i class="fas fa-guitar text-white text-5xl"></i>
+                    </div>
+                </div>
+            </div>
+            <h1 class="header-title mb-4">Сборник лучших песен</h1>
+            <p class="subtitle">Подберите песни по типу боя и начните играть уже сегодня!</p>
+        </header>
+        
+        <div class="search-container">
+            <div class="search-icon">
+                <i class="fas fa-search"></i>
+            </div>
+            <input type="text" id="search-input" class="search-box" placeholder="Поиск песен по названию или исполнителю...">
+            <div id="clear-search" class="clear-search hidden">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+        
+        <section class="glass rounded-3xl shadow-2xl overflow-hidden mb-16 song-list-container">
+            <div class="py-8 bg-gradient-to-r from-indigo-900/50 to-purple-900/50">
+                <div class="text-center mb-10">
+                    <h2 class="section-title">Выберите тип ритма</h2>
+                    <p class="text-indigo-200 max-w-2xl mx-auto">Каждый ритмический рисунок открывает уникальные возможности для выражения музыки</p>
+                </div>
+                
+                <div class="flex flex-wrap justify-center px-4">
+                    <button class="rhythm-tab active" data-rhythm="four">
+                        <span class="rhythm-indicator rhythm-four"></span>
+                        Четверка
+                    </button>
+                    <button class="rhythm-tab" data-rhythm="six">
+                        <span class="rhythm-indicator rhythm-six"></span>
+                        Шестерка
+                    </button>
+                    <button class="rhythm-tab" data-rhythm="eight">
+                        <span class="rhythm-indicator rhythm-eight"></span>
+                        Восьмерка
+                    </button>
+                    <button class="rhythm-tab" data-rhythm="reggae">
+                        <span class="rhythm-indicator rhythm-reggae"></span>
+                        Регги
+                    </button>
+                    <button class="rhythm-tab" data-rhythm="bossa">
+                        <span class="rhythm-indicator rhythm-bossa"></span>
+                        Сложные ритмы
+                    </button>
+                </div>
+            </div>
+
+            <div class="p-6">
+                <h2 class="text-2xl font-bold mb-6 text-center section-title">Выберите песни</h2>
+                <div id="song-list" class="song-grid">
+                    <!-- Песни с боем "четверка" -->
+                    <div class="song-item four p-5 rounded-xl cursor-pointer" data-id="1" data-title="Осень" data-artist="7Б">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-drum text-indigo-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Осень</h3>
+                                <p class="song-artist">7Б</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item four p-5 rounded-xl cursor-pointer" data-id="2" data-title="фанк" data-artist="Валентин Стрыкало">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-drum text-indigo-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">фанк</h3>
+                                <p class="song-artist">Валентин Стрыкало</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item four p-5 rounded-xl cursor-pointer" data-id="3" data-title="Для тебя" data-artist="Звери">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-drum text-indigo-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Для тебя</h3>
+                                <p class="song-artist">Звери</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item four p-5 rounded-xl cursor-pointer" data-id="4" data-title="Атаман" data-artist="Кино">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-drum text-indigo-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Атаман</h3>
+                                <p class="song-artist">Кино</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item four p-5 rounded-xl cursor-pointer" data-id="5" data-title="Малыш" data-artist="Кино">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-drum text-indigo-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Малыш</h3>
+                                <p class="song-artist">Кино</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item four p-5 rounded-xl cursor-pointer" data-id="6" data-title="Мама, мы все тяжело больны" data-artist="Кино">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-drum text-indigo-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Мама, мы все тяжело больны</h3>
+                                <p class="song-artist">Кино</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item four p-5 rounded-xl cursor-pointer" data-id="7" data-title="Ночь" data-artist="Кино">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-drum text-indigo-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Ночь</h3>
+                                <p class="song-artist">Кино</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item four p-5 rounded-xl cursor-pointer" data-id="8" data-title="Печаль" data-artist="Кино">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-drum text-indigo-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Печаль</h3>
+                                <p class="song-artist">Кино</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item four p-5 rounded-xl cursor-pointer" data-id="9" data-title="Попробуй спеть вместе со мной" data-artist="Кино">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-drum text-indigo-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Попробуй спеть вместе со мной</h3>
+                                <p class="song-artist">Кино</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item four p-5 rounded-xl cursor-pointer" data-id="10" data-title="Сосны на морском берегу" data-artist="Кино">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-drum text-indigo-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Сосны на морском берегу</h3>
+                                <p class="song-artist">Кино</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item four p-5 rounded-xl cursor-pointer" data-id="11" data-title="Внезапная Голова" data-artist="Король И Шут">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-drum text-indigo-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Внезапная Голова</h3>
+                                <p class="song-artist">Король И Шут</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item four p-5 rounded-xl cursor-pointer" data-id="12" data-title="Марионетки" data-artist="Король И Шут">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-drum text-indigo-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Марионетки</h3>
+                                <p class="song-artist">Король И Шут</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item four p-5 rounded-xl cursor-pointer" data-id="13" data-title="Мертвый Анархист" data-artist="Король И Шут">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-drum text-indigo-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Мертвый Анархист</h3>
+                                <p class="song-artist">Король И Шут</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item four p-5 rounded-xl cursor-pointer" data-id="14" data-title="Помнят С Горечью Древляне" data-artist="Король И Шут">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-drum text-indigo-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Помнят С Горечью Древляне</h3>
+                                <p class="song-artist">Король И Шут</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item four p-5 rounded-xl cursor-pointer" data-id="15" data-title="Северный Флот" data-artist="Король И Шут">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-drum text-indigo-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Северный Флот</h3>
+                                <p class="song-artist">Король И Шут</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item four p-5 rounded-xl cursor-pointer" data-id="16" data-title="Счастье" data-artist="Король И Шут">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-drum text-indigo-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Счастье</h3>
+                                <p class="song-artist">Король И Шут</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item four p-5 rounded-xl cursor-pointer" data-id="17" data-title="Тяни" data-artist="Король И Шут">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-drum text-indigo-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Тяни</h3>
+                                <p class="song-artist">Король И Шут</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item four p-5 rounded-xl cursor-pointer" data-id="18" data-title="Глупые снежинки" data-artist="Ласковый Май">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-drum text-indigo-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Глупые снежинки</h3>
+                                <p class="song-artist">Ласковый Май</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item four p-5 rounded-xl cursor-pointer" data-id="19" data-title="Щемит в груди" data-artist="Многоточие">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-drum text-indigo-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Щемит в груди</h3>
+                                <p class="song-artist">Многоточие</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item four p-5 rounded-xl cursor-pointer" data-id="20" data-title="Одинокая Птица" data-artist="Наутилус Помпилиус">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-drum text-indigo-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Одинокая Птица</h3>
+                                <p class="song-artist">Наутилус Помпилиус</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item four p-5 rounded-xl cursor-pointer" data-id="21" data-title="Снежинка" data-artist="Папин Олимпос">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-drum text-indigo-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Снежинка</h3>
+                                <p class="song-artist">Папин Олимпос</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item four p-5 rounded-xl cursor-pointer" data-id="22" data-title="Бомж" data-artist="Сектор Газа">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-drum text-indigo-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Бомж</h3>
+                                <p class="song-artist">Сектор Газа</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item four p-5 rounded-xl cursor-pointer" data-id="23" data-title="Life" data-artist="Сектор Газа">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-drum text-indigo-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Life</h3>
+                                <p class="song-artist">Сектор Газа</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item four p-5 rounded-xl cursor-pointer" data-id="24" data-title="Туман" data-artist="Сектор Газа">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-drum text-indigo-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Туман</h3>
+                                <p class="song-artist">Сектор Газа</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item four p-5 rounded-xl cursor-pointer" data-id="25" data-title="Дальнобойная" data-artist="Сергей Трофимов">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-drum text-indigo-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Дальнобойная</h3>
+                                <p class="song-artist">Сергей Трофимов</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item four p-5 rounded-xl cursor-pointer" data-id="26" data-title="Орбит Без Сахара" data-artist="Сплин">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-drum text-indigo-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Орбит Без Сахара</h3>
+                                <p class="song-artist">Сплин</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item four p-5 rounded-xl cursor-pointer" data-id="27" data-title="Марихуана 3000" data-artist="Фактор 2">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-drum text-indigo-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Марихуана 3000</h3>
+                                <p class="song-artist">Фактор 2</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item four p-5 rounded-xl cursor-pointer" data-id="28" data-title="Шалава" data-artist="Фактор 2">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-drum text-indigo-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Шалава</h3>
+                                <p class="song-artist">Фактор 2</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item four p-5 rounded-xl cursor-pointer" data-id="29" data-title="Кино" data-artist="XOLIDAYBOY">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-drum text-indigo-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Кино</h3>
+                                <p class="song-artist">XOLIDAYBOY</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+<!-- Песни с боем "шестерка" -->
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="33" data-title="Удалю" data-artist="Алена швац">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Удалю</h3>
+            <p class="song-artist">Алена швац</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="34" data-title="Дарите женщинам цветы" data-artist="Jazzdauren">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Дарите женщинам цветы</h3>
+            <p class="song-artist">Jazzdauren</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="35" data-title="Невеста" data-artist="Егор Крид">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Невеста</h3>
+            <p class="song-artist">Егор Крид</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="36" data-title="До скорой встречи" data-artist="Звери">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">До скорой встречи</h3>
+            <p class="song-artist">Звери</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="37" data-title="Комарово" data-artist="Игорь Скляр">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Комарово</h3>
+            <p class="song-artist">Игорь Скляр</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="38" data-title="Здравствуй небо в облаках" data-artist="Конец фильма">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Здравствуй небо в облаках</h3>
+            <p class="song-artist">Конец фильма</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="39" data-title="Маска" data-artist="Король И Шут">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Маска</h3>
+            <p class="song-artist">Король И Шут</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="40" data-title="Белые розы" data-artist="Ласковый Май">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Белые розы</h3>
+            <p class="song-artist">Ласковый Май</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="41" data-title="Экспонат" data-artist="Ленинград">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Экспонат</h3>
+            <p class="song-artist">Ленинград</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="42" data-title="Утекай" data-artist="Мумий Тролль">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Утекай</h3>
+            <p class="song-artist">Мумий Тролль</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="43" data-title="Крошка Моя" data-artist="Руки Вверх!">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Крошка Моя</h3>
+            <p class="song-artist">Руки Вверх!</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="44" data-title="Демобилизация" data-artist="Сектор Газа">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Демобилизация</h3>
+            <p class="song-artist">Сектор Газа</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="45" data-title="Голуби" data-artist="Сергей Трофимов">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Голуби</h3>
+            <p class="song-artist">Сергей Трофимов</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="46" data-title="Не забирай меня с пати" data-artist="Скриптонит">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Не забирай меня с пати</h3>
+            <p class="song-artist">Скриптонит</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="47" data-title="Незабудка" data-artist="Тима Белорусских">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Незабудка</h3>
+            <p class="song-artist">Тима Белорусских</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="48" data-title="Фантом" data-artist="Чиж и Ко">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Фантом</h3>
+            <p class="song-artist">Чиж и Ко</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="49" data-title="Как на войне" data-artist="Агата Кристи">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Как на войне</h3>
+            <p class="song-artist">Агата Кристи</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="50" data-title="Скейтер" data-artist="Алена Швец">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Скейтер</h3>
+            <p class="song-artist">Алена Швец</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="51" data-title="Фонтанчик с черный дельфином" data-artist="Гио Пика">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Фонтанчик с черный дельфином</h3>
+            <p class="song-artist">Гио Пика</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="52" data-title="что такое осень" data-artist="ДДТ">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">что такое осень</h3>
+            <p class="song-artist">ДДТ</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="53" data-title="Самая-самая" data-artist="Егор Крид">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Самая-самая</h3>
+            <p class="song-artist">Егор Крид</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="54" data-title="Просто такая сильная любовь" data-artist="Звери">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Просто такая сильная любовь</h3>
+            <p class="song-artist">Звери</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="55" data-title="Закрой за мной дверь" data-artist="Кино">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Закрой за мной дверь</h3>
+            <p class="song-artist">Кино</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="56" data-title="Прыгну Со Скалы" data-artist="Король И Шут">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Прыгну Со Скалы</h3>
+            <p class="song-artist">Король И Шут</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="57" data-title="Белые розы" data-artist="Ласковый Май">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Белые розы</h3>
+            <p class="song-artist">Ласковый Май</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="58" data-title="Слово пацана" data-artist="Макс Корж">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Слово пацана</h3>
+            <p class="song-artist">Макс Корж</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="59" data-title="Я не хочу без тебя спать" data-artist="Нервы">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Я не хочу без тебя спать</h3>
+            <p class="song-artist">Нервы</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="60" data-title="Крошка Моя" data-artist="Руки Вверх!">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Крошка Моя</h3>
+            <p class="song-artist">Руки Вверх!</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="61" data-title="Колхозный Панк" data-artist="Сектор Газа">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Колхозный Панк</h3>
+            <p class="song-artist">Сектор Газа</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="62" data-title="Город Сочи" data-artist="Сергей Трофимов">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Город Сочи</h3>
+            <p class="song-artist">Сергей Трофимов</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="63" data-title="Я знаю какая ты" data-artist="Скриптонит">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Я знаю какая ты</h3>
+            <p class="song-artist">Скриптонит</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="64" data-title="Красавица" data-artist="Фактор 2">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Красавица</h3>
+            <p class="song-artist">Фактор 2</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="65" data-title="Розовое вино" data-artist="Элджей & Федук">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Розовое вино</h3>
+            <p class="song-artist">Элджей & Федук</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="66" data-title="Как на войне" data-artist="Агата Кристи">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Как на войне</h3>
+            <p class="song-artist">Агата Кристи</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="67" data-title="Темная ночь" data-artist="Баста">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Темная ночь</h3>
+            <p class="song-artist">Баста</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="68" data-title="Да или... (Ты идеальна)" data-artist="Нервы">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Да или... (Ты идеальна)</h3>
+            <p class="song-artist">Нервы</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="69" data-title="Крылатые качели" data-artist="Детские песни">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Крылатые качели</h3>
+            <p class="song-artist">Детские песни</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="70" data-title="Брюнетки и блондинки" data-artist="Звери">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Брюнетки и блондинки</h3>
+            <p class="song-artist">Звери</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="71" data-title="ПММЛ" data-artist="Земфира">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">ПММЛ</h3>
+            <p class="song-artist">Земфира</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="72" data-title="Красно желтые дни" data-artist="Кино">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Красно желтые дни</h3>
+            <p class="song-artist">Кино</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="73" data-title="Два Друга И Разбойники" data-artist="Король И Шут">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Два Друга И Разбойники</h3>
+            <p class="song-artist">Король И Шут</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="74" data-title="Детство" data-artist="Ласковый май">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Детство</h3>
+            <p class="song-artist">Ласковый май</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="75" data-title="Моряк" data-artist="Федук">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Моряк</h3>
+            <p class="song-artist">Федук</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="76" data-title="я не хочу без тебя спать" data-artist="Нервы">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">я не хочу без тебя спать</h3>
+            <p class="song-artist">Нервы</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="77" data-title="Студент" data-artist="Руки Вверх!">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Студент</h3>
+            <p class="song-artist">Руки Вверх!</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="78" data-title="Свидание" data-artist="Сектор Газа">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Свидание</h3>
+            <p class="song-artist">Сектор Газа</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="79" data-title="Город Сочи" data-artist="Сергей Трофимов">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Город Сочи</h3>
+            <p class="song-artist">Сергей Трофимов</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="80" data-title="Город Сказка" data-artist="Танцы минус">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Город Сказка</h3>
+            <p class="song-artist">Танцы минус</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="81" data-title="Фото со звездой" data-artist="Lida">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Фото со звездой</h3>
+            <p class="song-artist">Lida</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="82" data-title="Сказочная Тайга" data-artist="Агата Кристи">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Сказочная Тайга</h3>
+            <p class="song-artist">Агата Кристи</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="83" data-title="Наше лето" data-artist="Валентин Стрыкало">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Наше лето</h3>
+            <p class="song-artist">Валентин Стрыкало</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="84" data-title="Юность" data-artist="Dabro">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Юность</h3>
+            <p class="song-artist">Dabro</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="85" data-title="Если ты меня не любишь" data-artist="Егор Крид">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Если ты меня не любишь</h3>
+            <p class="song-artist">Егор Крид</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="86" data-title="Все, что касается" data-artist="Звери">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Все, что касается</h3>
+            <p class="song-artist">Звери</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="87" data-title="Ромашки" data-artist="Земфира">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Ромашки</h3>
+            <p class="song-artist">Земфира</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="88" data-title="Закрой за мной дверь" data-artist="Кино">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Закрой за мной дверь</h3>
+            <p class="song-artist">Кино</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="89" data-title="Камнем По Голове" data-artist="Король И Шут">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Камнем По Голове</h3>
+            <p class="song-artist">Король И Шут</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="90" data-title="Белые розы" data-artist="Ласковый Май">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Белые розы</h3>
+            <p class="song-artist">Ласковый Май</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="91" data-title="Розовый вечер" data-artist="Ласковый май">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Розовый вечер</h3>
+            <p class="song-artist">Ласковый май</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="92" data-title="Утекай" data-artist="Мумий Тролль">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Утекай</h3>
+            <p class="song-artist">Мумий Тролль</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="93" data-title="Ай-яй-яй, Девчонка а" data-artist="Руки Вверх!">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Ай-яй-яй, Девчонка а</h3>
+            <p class="song-artist">Руки Вверх!</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="94" data-title="30 лет" data-artist="Сектор Газа">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">30 лет</h3>
+            <p class="song-artist">Сектор Газа</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="95" data-title="Ветер в голове" data-artist="Сергей Трофимов">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Ветер в голове</h3>
+            <p class="song-artist">Сергей Трофимов</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="96" data-title="Московская песня" data-artist="Сергей Трофимов">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Московская песня</h3>
+            <p class="song-artist">Сергей Трофимов</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="97" data-title="Город" data-artist="Танцы Минус">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Город</h3>
+            <p class="song-artist">Танцы Минус</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="98" data-title="Фантом" data-artist="Чиж И Ко">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Фантом</h3>
+            <p class="song-artist">Чиж И Ко</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="99" data-title="Мальчик на девятке" data-artist="Dead Blonde">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Мальчик на девятке</h3>
+            <p class="song-artist">Dead Blonde</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="100" data-title="кудрявые" data-artist="Алена швец">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">кудрявые</h3>
+            <p class="song-artist">Алена швец</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="101" data-title="здравствуй небо в облаках" data-artist="Армейская песня">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">здравствуй небо в облаках</h3>
+            <p class="song-artist">Армейская песня</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="102" data-title="Бременские Музыканты" data-artist="">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Бременские Музыканты</h3>
+            <p class="song-artist"></p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="103" data-title="Офисный стиляга" data-artist="Валентин Стрыкало">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Офисный стиляга</h3>
+            <p class="song-artist">Валентин Стрыкало</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="104" data-title="Улица Сталеваров" data-artist="Валентин Стрыкало">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Улица Сталеваров</h3>
+            <p class="song-artist">Валентин Стрыкало</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="105" data-title="Вы" data-artist="Дайте танк">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Вы</h3>
+            <p class="song-artist">Дайте танк</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="106" data-title="Когда твоя девушка больна" data-artist="Кино">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Когда твоя девушка больна</h3>
+            <p class="song-artist">Кино</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="107" data-title="Гробовщик" data-artist="Король И Шут">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Гробовщик</h3>
+            <p class="song-artist">Король И Шут</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="108" data-title="Где прошла ты" data-artist="Кравц">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Где прошла ты</h3>
+            <p class="song-artist">Кравц</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="109" data-title="В темноте" data-artist="Макс Корж">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">В темноте</h3>
+            <p class="song-artist">Макс Корж</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="110" data-title="Батареи" data-artist="Нервы">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Батареи</h3>
+            <p class="song-artist">Нервы</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="111" data-title="Нервы" data-artist="Нервы">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Нервы</h3>
+            <p class="song-artist">Нервы</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="112" data-title="День, когда мы все встретились с тобой" data-artist="Папин Олимпос">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">День, когда мы все встретились с тобой</h3>
+            <p class="song-artist">Папин Олимпос</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="113" data-title="18 мне уже" data-artist="Руки Вверх!">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">18 мне уже</h3>
+            <p class="song-artist">Руки Вверх!</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="114" data-title="Ю" data-artist="Танцы Минус">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Ю</h3>
+            <p class="song-artist">Танцы Минус</p>
+        </div>
+    </div>
+</div>
+                    
+                    <div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="33" data-title="Дарите женщинам цветы" data-artist="Jazzdauren">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Дарите женщинам цветы</h3>
+                                <p class="song-artist">Jazzdauren</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="34" data-title="Невеста" data-artist="Егор Крид">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Невеста</h3>
+                                <p class="song-artist">Егор Крид</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="35" data-title="До скорой встречи" data-artist="Звери">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">До скорой встречи</h3>
+                                <p class="song-artist">Звери</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="36" data-title="Комарово" data-artist="Игорь Скляр">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Комарово</h3>
+                                <p class="song-artist">Игорь Скляр</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="37" data-title="Здравствуй небо в облаках" data-artist="Конец фильма">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Здравствуй небо в облаках</h3>
+                                <p class="song-artist">Конец фильма</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="38" data-title="Маска" data-artist="Король И Шут">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Маска</h3>
+                                <p class="song-artist">Король И Шут</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="39" data-title="Белые розы" data-artist="Ласковый Май">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Белые розы</h3>
+                                <p class="song-artist">Ласковый Май</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="40" data-title="Экспонат" data-artist="Ленинград">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Экспонат</h3>
+                                <p class="song-artist">Ленинград</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="41" data-title="Утекай" data-artist="Мумий Тролль">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Утекай</h3>
+                                <p class="song-artist">Мумий Тролль</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="42" data-title="Крошка Моя" data-artist="Руки Вверх!">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Крошка Моя</h3>
+                                <p class="song-artist">Руки Вверх!</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="43" data-title="Демобилизация" data-artist="Сектор Газа">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Демобилизация</h3>
+                                <p class="song-artist">Сектор Газа</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="44" data-title="Голуби" data-artist="Сергей Трофимов">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Голуби</h3>
+                                <p class="song-artist">Сергей Трофимов</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="45" data-title="Не забирай меня с пати" data-artist="Скриптонит">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Не забирай меня с пати</h3>
+                                <p class="song-artist">Скриптонит</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="46" data-title="Незабудка" data-artist="Тима Белорусских">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Незабудка</h3>
+                                <p class="song-artist">Тима Белорусских</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="song-item six hidden p-5 rounded-xl cursor-pointer" data-id="47" data-title="Фантом" data-artist="Чиж и Ко">
+                        <div class="flex items-start">
+                            <div class="guitar-icon p-3 rounded-full mr-4">
+                                <i class="fas fa-compress-arrows-alt text-purple-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="song-title font-semibold text-white">Фантом</h3>
+                                <p class="song-artist">Чиж и Ко</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+<!-- Песни с боем "восьмерка" -->
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="201" data-title="Засыпай" data-artist="Ssshhiiitt!">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Засыпай</h3>
+            <p class="song-artist">Ssshhiiitt!</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="202" data-title="портвейн" data-artist="Алена швец">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">портвейн</h3>
+            <p class="song-artist">Алена швец</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="203" data-title="шампанское" data-artist="Алена швец">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">шампанское</h3>
+            <p class="song-artist">Алена швец</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="204" data-title="Лететь" data-artist="Амега">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Лететь</h3>
+            <p class="song-artist">Амега</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="205" data-title="Вахтерам" data-artist="Бумбокс">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Вахтерам</h3>
+            <p class="song-artist">Бумбокс</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="206" data-title="гори" data-artist="Валентин Стрыкало">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">гори</h3>
+            <p class="song-artist">Валентин Стрыкало</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="207" data-title="Друг" data-artist="Дайте танк">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Друг</h3>
+            <p class="song-artist">Дайте танк</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="208" data-title="Дым" data-artist="Егор Крид (feat. JONY)">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Дым</h3>
+            <p class="song-artist">Егор Крид (feat. JONY)</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="209" data-title="Ночь" data-artist="Женя Трофимов">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Ночь</h3>
+            <p class="song-artist">Женя Трофимов</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="210" data-title="Первая любовь" data-artist="Женя Трофимов (feat. Комната Культуры)">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Первая любовь</h3>
+            <p class="song-artist">Женя Трофимов (feat. Комната Культуры)</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="211" data-title="Самолеты" data-artist="Женя Трофимов">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Самолеты</h3>
+            <p class="song-artist">Женя Трофимов</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="212" data-title="Их там нет" data-artist="Каспер">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Их там нет</h3>
+            <p class="song-artist">Каспер</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="213" data-title="Эндорфин" data-artist="Макс Корж">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Эндорфин</h3>
+            <p class="song-artist">Макс Корж</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="214" data-title="Самый дорогой человек" data-artist="Нервы">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Самый дорогой человек</h3>
+            <p class="song-artist">Нервы</p>
+        </div>
+    </div>
+</div>
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="215" data-title="Я удалю тебя из друзей" data-artist="Папин Олимпос">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Я удалю тебя из друзей</h3>
+            <p class="song-artist">Папин Олимпос</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="216" data-title="Оружие" data-artist="Пицца">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Оружие</h3>
+            <p class="song-artist">Пицца</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="217" data-title="Контракт" data-artist="Пошлая Молли">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Контракт</h3>
+            <p class="song-artist">Пошлая Молли</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="218" data-title="Алешка" data-artist="Руки Вверх!">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Алешка</h3>
+            <p class="song-artist">Руки Вверх!</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="219" data-title="перезаряжай" data-artist="тдд">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">перезаряжай</h3>
+            <p class="song-artist">тдд</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="220" data-title="Зима" data-artist="5nizza">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Зима</h3>
+            <p class="song-artist">5nizza</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="221" data-title="Давай навсегда" data-artist="Dabro">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Давай навсегда</h3>
+            <p class="song-artist">Dabro</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="222" data-title="Надо повторить" data-artist="Dabro">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Надо повторить</h3>
+            <p class="song-artist">Dabro</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="223" data-title="Ты знаешь, мам" data-artist="Dabro">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Ты знаешь, мам</h3>
+            <p class="song-artist">Dabro</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="224" data-title="Костер" data-artist="HENSY, Клава Кока">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Костер</h3>
+            <p class="song-artist">HENSY, Клава Кока</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="225" data-title="Моя хулиганка" data-artist="XOLIDAYBOY">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Моя хулиганка</h3>
+            <p class="song-artist">XOLIDAYBOY</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="226" data-title="мою первую любовь звали ненависть" data-artist="Алена швец">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">мою первую любовь звали ненависть</h3>
+            <p class="song-artist">Алена швец</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="227" data-title="Ночь" data-artist="Андрей Губин">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Ночь</h3>
+            <p class="song-artist">Андрей Губин</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="228" data-title="Карие глаза" data-artist="Ахра">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Карие глаза</h3>
+            <p class="song-artist">Ахра</p>
+        </div>
+    </div>
+</div>
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="229" data-title="Ресницы" data-artist="Братья Грим">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Ресницы</h3>
+            <p class="song-artist">Братья Грим</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="230" data-title="Голая" data-artist="Градусы">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Голая</h3>
+            <p class="song-artist">Градусы</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="231" data-title="Все они о тебе" data-artist="Женя Трофимов">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Все они о тебе</h3>
+            <p class="song-artist">Женя Трофимов</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="232" data-title="Напитки покрепче" data-artist="Звери">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Напитки покрепче</h3>
+            <p class="song-artist">Звери</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="233" data-title="Feduk" data-artist="Краски">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Feduk</h3>
+            <p class="song-artist">Краски</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="234" data-title="2 типа людей" data-artist="Макс Корж">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">2 типа людей</h3>
+            <p class="song-artist">Макс Корж</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="235" data-title="Пить и Курить" data-artist="HENSY">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Пить и Курить</h3>
+            <p class="song-artist">HENSY</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="236" data-title="космос" data-artist="три дня дождя">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">космос</h3>
+            <p class="song-artist">три дня дождя</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="237" data-title="Влюбился" data-artist="Dabro">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Влюбился</h3>
+            <p class="song-artist">Dabro</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="238" data-title="Дальше - больше" data-artist="Dabro">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Дальше - больше</h3>
+            <p class="song-artist">Dabro</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="239" data-title="Она не такая" data-artist="Dabro">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Она не такая</h3>
+            <p class="song-artist">Dabro</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="240" data-title="Я по частицам" data-artist="Dabro">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Я по частицам</h3>
+            <p class="song-artist">Dabro</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="241" data-title="princess castle" data-artist="Jazmin Bean">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">princess castle</h3>
+            <p class="song-artist">Jazmin Bean</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="242" data-title="в кабинете у директора упр" data-artist="Алена Швец">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">в кабинете у директора упр</h3>
+            <p class="song-artist">Алена Швец</p>
+        </div>
+    </div>
+</div>
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="243" data-title="читай книги, ругайся матом" data-artist="Алена Швец">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">читай книги, ругайся матом</h3>
+            <p class="song-artist">Алена Швец</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="244" data-title="Ночь" data-artist="Андрей Губин">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Ночь</h3>
+            <p class="song-artist">Андрей Губин</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="245" data-title="Выпускной (Медлячок)" data-artist="Баста">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Выпускной (Медлячок)</h3>
+            <p class="song-artist">Баста</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="246" data-title="Кустурица" data-artist="Братья Грим">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Кустурица</h3>
+            <p class="song-artist">Братья Грим</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="247" data-title="Твои руки" data-artist="Гречка">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Твои руки</h3>
+            <p class="song-artist">Гречка</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="248" data-title="Поезда" data-artist="Женя Трофимов">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Поезда</h3>
+            <p class="song-artist">Женя Трофимов</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="249" data-title="Feduk" data-artist="Краски">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Feduk</h3>
+            <p class="song-artist">Краски</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="250" data-title="Мотылек" data-artist="Макс Корж">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Мотылек</h3>
+            <p class="song-artist">Макс Корж</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="251" data-title="Романс" data-artist="Пицца">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Романс</h3>
+            <p class="song-artist">Пицца</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="252" data-title="Хлопья летят наверх" data-artist="Feduk">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Хлопья летят наверх</h3>
+            <p class="song-artist">Feduk</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="253" data-title="Все за одного" data-artist="Dabro">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Все за одного</h3>
+            <p class="song-artist">Dabro</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="254" data-title="Два крыла" data-artist="Dabro">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Два крыла</h3>
+            <p class="song-artist">Dabro</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="255" data-title="Полюбил тебя" data-artist="Dabro">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Полюбил тебя</h3>
+            <p class="song-artist">Dabro</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="256" data-title="Пить и курить" data-artist="Hensy">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Пить и курить</h3>
+            <p class="song-artist">Hensy</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="257" data-title="I Wanna Be Your Slave" data-artist="Maneskin">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">I Wanna Be Your Slave</h3>
+            <p class="song-artist">Maneskin</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="258" data-title="в кабинете у директора" data-artist="Алена швец">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">в кабинете у директора</h3>
+            <p class="song-artist">Алена швец</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="259" data-title="вредина" data-artist="алена швец">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">вредина</h3>
+            <p class="song-artist">алена швец</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="260" data-title="Потерянный рай" data-artist="Ария">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Потерянный рай</h3>
+            <p class="song-artist">Ария</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="261" data-title="Сансара" data-artist="Баста">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Сансара</h3>
+            <p class="song-artist">Баста</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="262" data-title="Та что" data-artist="Бумбокс">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Та что</h3>
+            <p class="song-artist">Бумбокс</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="263" data-title="девочка с картинки" data-artist="Егор крид">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">девочка с картинки</h3>
+            <p class="song-artist">Егор крид</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="264" data-title="Танкист" data-artist="Жуки">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Танкист</h3>
+            <p class="song-artist">Жуки</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="265" data-title="Танцуй" data-artist="Звери">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Танцуй</h3>
+            <p class="song-artist">Звери</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="266" data-title="Свобода" data-artist="Ленинград">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Свобода</h3>
+            <p class="song-artist">Ленинград</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="267" data-title="Счастье" data-artist="Нервы">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Счастье</h3>
+            <p class="song-artist">Нервы</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="268" data-title="Тише" data-artist="Пицца">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Тише</h3>
+            <p class="song-artist">Пицца</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="269" data-title="Все за одного" data-artist="Dabro">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Все за одного</h3>
+            <p class="song-artist">Dabro</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="270" data-title="Мне не страшно" data-artist="Dabro">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Мне не страшно</h3>
+            <p class="song-artist">Dabro</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="271" data-title="Поцелуй" data-artist="Dabro">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Поцелуй</h3>
+            <p class="song-artist">Dabro</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="272" data-title="Поболело и прошло" data-artist="Hensy">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Поболело и прошло</h3>
+            <p class="song-artist">Hensy</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="273" data-title="Тебя нет" data-artist="Ssshhhiiitt!">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Тебя нет</h3>
+            <p class="song-artist">Ssshhhiiitt!</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="274" data-title="мою первую любовь звали ненависть" data-artist="Алена швец">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">мою первую любовь звали ненависть</h3>
+            <p class="song-artist">Алена швец</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="275" data-title="мемы" data-artist="алена швец">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">мемы</h3>
+            <p class="song-artist">алена швец</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="276" data-title="я свободен" data-artist="Ария">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">я свободен</h3>
+            <p class="song-artist">Ария</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="277" data-title="Мы Не Ангелы Парень" data-artist="Би-2">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Мы Не Ангелы Парень</h3>
+            <p class="song-artist">Би-2</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="278" data-title="Я свободен" data-artist="Валерий Кипелов">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Я свободен</h3>
+            <p class="song-artist">Валерий Кипелов</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="279" data-title="Надо ли" data-artist="Егор Крид">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Надо ли</h3>
+            <p class="song-artist">Егор Крид</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="280" data-title="Замок на мостик" data-artist="HENSY">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Замок на мостик</h3>
+            <p class="song-artist">HENSY</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="281" data-title="бесконечность" data-artist="земфира">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">бесконечность</h3>
+            <p class="song-artist">земфира</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="282" data-title="Знаешь ли ты" data-artist="МакSим">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Знаешь ли ты</h3>
+            <p class="song-artist">МакSим</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="283" data-title="Счастье" data-artist="Нервы">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Счастье</h3>
+            <p class="song-artist">Нервы</p>
+        </div>
+    </div>
+</div>
+
+<div class="song-item eight hidden p-5 rounded-xl cursor-pointer" data-id="284" data-title="Положение" data-artist="Скриптонит">
+    <div class="flex items-start">
+        <div class="guitar-icon p-3 rounded-full mr-4">
+            <i class="fas fa-infinity text-green-400 text-xl"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="song-title font-semibold text-white">Положение</h3>
+            <p class="song-artist">Скриптонит</p>
+        </div>
+    </div>
+</div>
+
+ <div class="cart-container bg-gray-900 rounded-2xl shadow-2xl p-6 mb-10">
+            <h2 class="text-2xl font-bold mb-6 flex items-center">
+                <i class="fas fa-shopping-cart mr-3 text-indigo-400"></i>
+                Ваш набор песен
+                <span id="cart-count" class="ml-auto bg-indigo-600 text-white text-sm font-bold px-3 py-1 rounded-full">0</span>
+            </h2>
+
+            <div id="cart-items" class="mb-6 max-h-96 overflow-y-auto pr-2">
+                <div class="text-center py-10" id="empty-cart-message">
+                    <i class="fas fa-music text-4xl mb-4 text-indigo-500"></i>
+                    <p class="text-xl text-indigo-300 mb-2">Ваш набор песен пуст</p>
+                    <p class="text-gray-400">Выберите песни из списка выше</p>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-700 pt-4">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-gray-400">Количество песен:</span>
+                    <span id="total-songs" class="font-bold text-white">0</span>
+                </div>
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-gray-400">Цена за песню:</span>
+                    <span class="font-bold text-indigo-300">49₽</span>
+                </div>
+                <div class="flex justify-between items-center text-lg border-t border-gray-700 pt-3">
+                    <span class="font-semibold">Итого к оплате:</span>
+                    <span id="total-price" class="text-2xl font-bold text-indigo-400">0₽</span>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <label class="block text-gray-400 mb-2">Контактные данные:</label>
+                <input type="text" id="contact-info" class="contact-input w-full mb-4" placeholder="Ваш ник в Telegram или номер телефона">
+                <p class="text-xs text-gray-500 mb-4">Укажите как с вами связаться для уточнения деталей</p>
+            </div>
+
+            <button id="checkout-btn" class="w-full mt-2 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold rounded-xl flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed animate-pulse-custom shadow-lg transform transition hover:scale-[1.02] duration-300" disabled>
+                <i class="fas fa-paper-plane mr-3"></i>
+                Отправить заявку на песни
+            </button>
+        </div>
+
+        <footer class="mt-12 text-center text-gray-500 text-sm">
+            <p>© 2023 Сборник лучших песен. Все песни по 49₽!</p>
+            <p class="mt-1">Проект создан для гитаристов, которые хотят освоить дополнительные песни вне занятий</p>
+        </footer>
+    </div>
+    
+    <!--   <!-- Notification element -->
+    <div id="notification" class="notification">
+        <i class="fas fa-check-circle mr-2"></i>
+        <span id="notification-text">Сообщение отправлено!</span>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Конфигурация Telegram бота
+            const BOT_TOKEN = '7598736914:AAHVJUOt7okTfMh1VE_l1ZrCqaXv-r1PcWI';
+            const ADMIN_CHAT_ID = '725158536';
+            
+            // Элементы интерфейса
+            const rhythmTabs = document.querySelectorAll('.rhythm-tab');
+            const songItems = document.querySelectorAll('.song-item');
+            const cartItemsContainer = document.getElementById('cart-items');
+            const emptyCartMessage = document.getElementById('empty-cart-message');
+            const totalSongsElement = document.getElementById('total-songs');
+            const totalPriceElement = document.getElementById('total-price');
+            const cartCountElement = document.getElementById('cart-count');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notification-text');
+            const contactInput = document.getElementById('contact-info');
+            const searchInput = document.getElementById('search-input');
+            const clearSearchBtn = document.getElementById('clear-search');
+            const noResultsElement = document.getElementById('no-results');
+            const songListElement = document.getElementById('song-list');
+
+            // Массив для хранения выбранных песен
+            let selectedSongs = [];
+
+            // Показываем уведомление
+            function showNotification(message, isSuccess = true) {
+                notificationText.textContent = message;
+                notification.style.background = isSuccess ? '#10b981' : '#ef4444';
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+
+            // Функция отправки сообщения в Telegram
+            async function sendTelegramMessage(songs, totalPrice, contact) {
+                const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+                
+                // Формируем сообщение
+                let message = `<b>🎸 Новая заявка на песни!</b>\n\n`;
+                message += `<b>Контактные данные:</b> ${contact}\n\n`;
+                message += `<b>Выбранные песни:</b>\n`;
+                
+                songs.forEach(song => {
+                    message += `- ${song.title} (${song.artist})\n`;
+                });
+                
+                message += `\n<b>Количество песен:</b> ${songs.length}\n`;
+                message += `<b>Сумма заказа:</b> ${totalPrice}₽\n\n`;
+                message += `🆔 <b>ID пользователя:</b> ${Math.floor(Math.random() * 100000)}`;
+                
+                const data = {
+                    chat_id: ADMIN_CHAT_ID,
+                    text: message,
+                    parse_mode: 'HTML'
+                };
+
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+                    
+                    const result = await response.json();
+                    if (result.ok) {
+                        return true;
+                    }
+                    return false;
+                } catch (error) {
+                    console.error('Error sending message:', error);
+                    return false;
+                }
+            }
+
+            // Функция поиска песен
+            function searchSongs() {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                const activeRhythm = document.querySelector('.rhythm-tab.active').getAttribute('data-rhythm');
+                
+                // Показываем/скрываем кнопку очистки
+                clearSearchBtn.classList.toggle('hidden', !searchTerm);
+                
+                let resultsFound = false;
+                
+                songItems.forEach(song => {
+                    const songId = song.getAttribute('data-id');
+                    const songTitle = song.getAttribute('data-title').toLowerCase();
+                    const songArtist = song.getAttribute('data-artist').toLowerCase();
+                    const isInCurrentRhythm = song.classList.contains(activeRhythm);
+                    
+                    // Проверяем совпадение с поисковым запросом
+                    const matchesSearch = songTitle.includes(searchTerm) || 
+                                         songArtist.includes(searchTerm);
+                    
+                    // Проверяем, должна ли песня отображаться
+                    const shouldShow = isInCurrentRhythm && (searchTerm === '' || matchesSearch);
+                    
+                    if (shouldShow) {
+                        resultsFound = true;
+                        song.classList.remove('hidden');
+                        
+                        // Подсветка совпадений
+                        if (searchTerm && matchesSearch) {
+                            const regex = new RegExp(`(${searchTerm})`, 'gi');
+                            
+                            // Обновляем заголовок с подсветкой
+                            const titleElement = song.querySelector('.song-title');
+                            const artistElement = song.querySelector('.song-artist');
+                            
+                            titleElement.innerHTML = songTitle.replace(regex, '<span class="highlight">$1</span>');
+                            artistElement.innerHTML = songArtist.replace(regex, '<span class="highlight">$1</span>');
+                        } else {
+                            // Возвращаем оригинальные названия
+                            const titleElement = song.querySelector('.song-title');
+                            const artistElement = song.querySelector('.song-artist');
+                            
+                            titleElement.textContent = song.getAttribute('data-title');
+                            artistElement.textContent = song.getAttribute('data-artist');
+                        }
+                    } else {
+                        song.classList.add('hidden');
+                    }
+                });
+                
+                // Показываем сообщение, если ничего не найдено
+                noResultsElement.classList.toggle('hidden', resultsFound || searchTerm === '');
+            }
+
+            // Обработчики для вкладок типов боя
+            rhythmTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Удаляем активный класс у всех вкладок
+                    rhythmTabs.forEach(t => t.classList.remove('active'));
+                    
+                    // Добавляем активный класс текущей вкладке
+                    this.classList.add('active');
+                    
+                    // Сбрасываем поиск при смене ритма
+                    searchInput.value = '';
+                    clearSearchBtn.classList.add('hidden');
+                    
+                    // Обновляем список песен
+                    searchSongs();
+                });
+            });
+
+            // Обработчики для выбора песен
+            songItems.forEach(song => {
+                song.addEventListener('click', function() {
+                    const songId = this.getAttribute('data-id');
+                    const songTitle = this.getAttribute('data-title');
+                    const songArtist = this.getAttribute('data-artist');
+                    const songPrice = 49; // Фиксированная цена
+                    
+                    // Проверяем, есть ли уже эта песня в корзине
+                    const existingIndex = selectedSongs.findIndex(item => item.id === songId);
+                    
+                    if (existingIndex === -1) {
+                        // Добавляем песню в корзину
+                        selectedSongs.push({
+                            id: songId,
+                            title: songTitle,
+                            artist: songArtist,
+                            price: songPrice
+                        });
+                        
+                        // Визуальный эффект добавления
+                        this.classList.add('selected');
+                        this.style.transform = 'scale(0.95)';
+                        this.style.boxShadow = '0 0 20px rgba(99, 102, 241, 0.7)';
+                        setTimeout(() => {
+                            this.style.transform = '';
+                        }, 300);
+                        
+                        // Показываем уведомление
+                        showNotification(`"${songTitle}" добавлена в набор!`);
+                    } else {
+                        // Удаляем песню из корзины
+                        selectedSongs.splice(existingIndex, 1);
+                        this.classList.remove('selected');
+                        showNotification(`"${songTitle}" удалена из набора!`, false);
+                    }
+                    
+                    // Обновляем корзину
+                    updateCart();
+                });
+            });
+
+            // Функция обновления корзины
+            function updateCart() {
+                // Скрываем или показываем сообщение о пустой корзине
+                if (selectedSongs.length === 0) {
+                    emptyCartMessage.classList.remove('hidden');
+                } else {
+                    emptyCartMessage.classList.add('hidden');
+                }
+                
+                // Очищаем контейнер корзины
+                cartItemsContainer.innerHTML = '';
+                
+                // Добавляем каждый элемент в корзину
+                selectedSongs.forEach((song, index) => {
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'cart-item rounded-xl p-4 mb-3 flex items-center';
+                    cartItem.innerHTML = `
+                        <div class="flex-grow">
+                            <h4 class="font-medium text-white">${song.title}</h4>
+                            <p class="text-sm text-indigo-300">${song.artist}</p>
+                        </div>
+                        <div class="ml-4 font-bold text-indigo-400">${song.price}₽</div>
+                        <button class="remove-btn text-red-400 hover:text-red-300 rounded-full p-2 ml-4" data-index="${index}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    `;
+                    cartItemsContainer.appendChild(cartItem);
+                    
+                    // Анимация появления
+                    setTimeout(() => {
+                        cartItem.style.opacity = '1';
+                    }, 50);
+                });
+                
+                // Добавляем обработчики для кнопок удаления
+                document.querySelectorAll('.remove-btn').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const index = parseInt(this.getAttribute('data-index'));
+                        removeFromCart(index);
+                    });
+                });
+                
+                // Обновляем счетчик и итоговую сумму
+                cartCountElement.textContent = selectedSongs.length;
+                totalSongsElement.textContent = selectedSongs.length;
+                totalPriceElement.textContent = `${calculateTotal()}₽`;
+                
+                // Активируем или деактивируем кнопку оформления
+                checkoutBtn.disabled = selectedSongs.length === 0;
+                
+                // Обновляем выделение песен в списке
+                updateSongSelection();
+            }
+            
+            // Обновляет выделение песен в списке
+            function updateSongSelection() {
+                songItems.forEach(song => {
+                    const songId = song.getAttribute('data-id');
+                    const isSelected = selectedSongs.some(item => item.id === songId);
+                    
+                    if (isSelected) {
+                        song.classList.add('selected');
+                    } else {
+                        song.classList.remove('selected');
+                    }
+                });
+            }
+            
+            // Функция удаления из корзины
+            function removeFromCart(index) {
+                if (index >= 0 && index < selectedSongs.length) {
+                    const songTitle = selectedSongs[index].title;
+                    
+                    // Получаем элемент для анимации
+                    const cartItemElement = cartItemsContainer.children[index];
+                    
+                    // Анимация удаления
+                    if (cartItemElement) {
+                        cartItemElement.style.transform = 'translateX(100%)';
+                        cartItemElement.style.opacity = '0';
+                    }
+                    
+                    // Удаляем элемент из массива после анимации
+                    setTimeout(() => {
+                        selectedSongs.splice(index, 1);
+                        updateCart();
+                        showNotification(`"${songTitle}" удалена из набора!`, false);
+                    }, 300);
+                }
+            }
+            
+            // Функция расчета итоговой суммы
+            function calculateTotal() {
+                return selectedSongs.reduce((total, song) => total + song.price, 0);
+            }
+            
+            // Обработчик для кнопки оформления
+            checkoutBtn.addEventListener('click', async function() {
+                if (selectedSongs.length > 0) {
+                    const contact = contactInput.value.trim();
+                    
+                    if (!contact) {
+                        showNotification('Пожалуйста, укажите контактные данные!', false);
+                        contactInput.focus();
+                        return;
+                    }
+                    
+                    // Блокируем кнопку на время обработки
+                    checkoutBtn.disabled = true;
+                    checkoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Отправка...';
+                    
+                    const totalPrice = calculateTotal();
+                    
+                    // Отправляем заказ в Telegram
+                    const success = await sendTelegramMessage(selectedSongs, totalPrice, contact);
+                    
+                    if (success) {
+                        // Показываем сообщение об оформлении
+                        showNotification(`Заявка успешно отправлена! Сумма: ${totalPrice}₽`);
+                        
+                        // Очищаем корзину после оформления
+                        selectedSongs = [];
+                        updateCart();
+                        contactInput.value = '';
+                        
+                        // Возвращаемся к первому табу
+                        rhythmTabs[0].click();
+                    } else {
+                        showNotification('Ошибка отправки. Попробуйте еще раз', false);
+                    }
+                    
+                    // Восстанавливаем кнопку
+                    setTimeout(() => {
+                        checkoutBtn.disabled = false;
+                        checkoutBtn.innerHTML = '<i class="fas fa-paper-plane mr-3"></i> Отправить заявку на обучение';
+                    }, 2000);
+                }
+            });
+            
+            // Обработчики для поиска
+            searchInput.addEventListener('input', searchSongs);
+            
+            clearSearchBtn.addEventListener('click', function() {
+                searchInput.value = '';
+                clearSearchBtn.classList.add('hidden');
+                searchSongs();
+            });
+            
+            // Инициализация корзины
+            updateCart();
+            
+            // Инициализация поиска
+            searchSongs();
+        });
+    </script>
+</body>
+</html>
