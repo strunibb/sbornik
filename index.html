@@ -1,152 +1,254 @@
 <!DOCTYPE html>
-
 <html lang="ru">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>Сборник лучших песен</title>
+
+  <!-- Tailwind + Icons + Fonts -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
   <style>
-    :root{--primary:#6366f1;--secondary:#8b5cf6;--accent:#ec4899;--dark:#0f172a;--darker:#0c1120;--light:#e2e8f0}
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{
-      font-family:'Poppins',sans-serif;color:var(--light);line-height:1.6;overflow-x:hidden;
-      background: radial-gradient(1200px 1200px at 10% -20%, rgba(99,102,241,.15), transparent 60%),
-                  radial-gradient(1200px 1200px at 110% 120%, rgba(236,72,153,.12), transparent 60%),
-                  linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
-      min-height:100vh;
+    :root{
+      --primary:#6366f1;--secondary:#8b5cf6;--accent:#ec4899;
+      --dark:#0f172a;--darker:#0b1020;--light:#e2e8f0
     }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;color:var(--light);font-family:'Poppins',sans-serif;line-height:1.6;overflow-x:hidden;
+      background:
+        radial-gradient(1200px 1200px at 10% -20%, rgba(99,102,241,.14), transparent 60%),
+        radial-gradient(1200px 1200px at 110% 120%, rgba(236,72,153,.12), transparent 60%),
+        linear-gradient(135deg,var(--darker) 0%, var(--dark) 100%);
+      min-height:100vh;
+      overscroll-behavior-y: contain;
+      -webkit-tap-highlight-color: transparent;
+      padding-bottom: max(16px, env(safe-area-inset-bottom));
+    }
+
+    /* --- Hero --- */
     .header-title{
       font-family:'Montserrat',sans-serif;font-weight:800;letter-spacing:.2px;
       font-size:clamp(2.2rem,5vw,3.6rem);
-      background:linear-gradient(90deg,#f472b6,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      background:linear-gradient(90deg,#f472b6,#8b5cf6,#60a5fa);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
       text-shadow:0 10px 30px rgba(139,92,246,.25);
+      background-size:200% 100%;
+      animation:gradientShift 8s ease-in-out infinite;
+    }
+    @keyframes gradientShift{
+      0%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+      100%{background-position:0% 50%}
     }
     .glass{background:rgba(15,23,42,.55);border:1px solid rgba(99,102,241,.18);backdrop-filter:blur(12px)}
+    .glass-strong{background:rgba(15,23,42,.72);border:1px solid rgba(99,102,241,.28);backdrop-filter:blur(14px)}
+
+    /* --- Song cards --- */
     .song-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
     .song-item{
       border:1px solid rgba(99,102,241,.18);background:rgba(15,23,42,.66);backdrop-filter:blur(8px);
-      border-radius:14px;padding:12px;cursor:pointer;transition:.25s;position:relative;overflow:hidden
+      border-radius:16px;padding:14px;cursor:pointer;transition:.25s;position:relative;overflow:hidden
     }
     .song-item:hover{transform:translateY(-3px);border-color:rgba(139,92,246,.55);box-shadow:0 12px 24px -8px rgba(99,102,241,.35)}
-    .song-item.selected{border-color:#8b5cf6;box-shadow:0 0 24px rgba(139,92,246,.55) inset, 0 12px 30px -10px rgba(139,92,246,.35);
-      background:linear-gradient(135deg, rgba(99,102,241,.22), rgba(139,92,246,.22))}
+    .song-item.selected{
+      border-color:#8b5cf6;box-shadow:0 0 24px rgba(139,92,246,.55) inset, 0 12px 30px -10px rgba(139,92,246,.35);
+      background:linear-gradient(135deg, rgba(99,102,241,.22), rgba(139,92,246,.22))
+    }
     .song-title{font-family:'Montserrat',sans-serif;font-weight:700;font-size:1rem;line-height:1.25;word-break:break-word}
     .song-artist{font-size:.9rem;color:#a3bffa;word-break:break-word}
-    .guitar-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(99,102,241,.14);transition:.25s}
+    .guitar-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(99,102,241,.14);transition:.25s}
     .song-item:hover .guitar-icon{transform:rotate(6deg) scale(1.04);background:rgba(99,102,241,.24)}
-    .search-box{width:100%;background:rgba(30,41,59,.7);border:1px solid rgba(99,102,241,.2);color:#fff;padding:14px 48px;border-radius:50px}
+
+    /* --- Search --- */
+    .search-box{width:100%;background:rgba(30,41,59,.7);border:1px solid rgba(99,102,241,.2);color:#fff;padding:16px 54px;border-radius:50px}
     .search-box:focus{outline:none;border-color:var(--secondary);box-shadow:0 0 0 4px rgba(139,92,246,.22)}
     .search-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:#94a3b8}
     .clear-search{position:absolute;right:16px;top:50%;transform:translateY(-50%);color:#94a3b8;cursor:pointer}
-    .no-results{text-align:center;opacity:.8;grid-column:1/-1}
-    .notification{position:fixed;right:18px;bottom:24px;background:linear-gradient(90deg,#10b981,#06b6d4);color:#fff;
-      padding:12px 16px;border-radius:12px;transform:translateY(140%);transition:.4s;z-index:1000;box-shadow:0 10px 24px rgba(0,0,0,.25);font-weight:600}
-    .notification.show{transform:translateY(0)}
-    .cart-container{border-top:3px solid var(--primary)}
+    .highlight{background:rgba(236,72,153,.3);border-radius:4px;padding:0 2px}
+
+    /* --- Chips / artists --- */
+    .chip{
+      background:linear-gradient(90deg,rgba(99,102,241,.20),rgba(236,72,153,.20));
+      border:1px solid rgba(236,72,153,.35);
+      border-radius:999px;padding:10px 14px;white-space:nowrap;cursor:pointer;transition:.2s;
+      box-shadow:inset 0 0 18px rgba(139,92,246,.2), 0 0 22px rgba(236,72,153,.15);
+      font-size:0.95rem
+    }
+    .chip:hover{transform:translateY(-1px);filter:saturate(1.1)}
+    .chip.active{border-color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.25), inset 0 0 24px rgba(139,92,246,.35)}
+    .chips-wrap{overflow:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+    .chips-wrap::-webkit-scrollbar{height:8px}
+    .chips-wrap::-webkit-scrollbar-thumb{background:rgba(148,163,184,.35);border-radius:999px}
+
+    /* --- Cart --- */
     .cart-item{background:rgba(30,41,59,.7);border:1px solid rgba(99,102,241,.24);border-radius:12px}
     .remove-btn{transition:.25s}
-    .remove-btn:hover{transform:scale(1.06);background:rgba(239,68,68,.2)}
-    .highlight{background:rgba(236,72,153,.3);border-radius:4px;padding:0 2px}
+    .remove-btn:hover{transform:scale(1.06);background:rgba(239,68,68,.22)}
+
+    /* --- Floating buttons --- */
     #toCartFloating{
-      position:fixed;left:50%;transform:translateX(-50%);bottom:14px;z-index:900;display:none;
-      background:linear-gradient(90deg,#8b5cf6,#ec4899);color:#fff;border:none;padding:12px 18px;border-radius:999px;
+      position:fixed;left:50%;transform:translateX(-50%);bottom:max(14px, env(safe-area-inset-bottom));z-index:900;display:none;
+      background:linear-gradient(90deg,#8b5cf6,#ec4899);color:#fff;border:none;padding:13px 20px;border-radius:999px;
       box-shadow:0 12px 26px rgba(236,72,153,.35),0 0 40px rgba(139,92,246,.4);font-weight:700
     }
     #toCartFloating.show{display:flex}
-    .neon-chip{
-      background:linear-gradient(90deg,rgba(99,102,241,.25),rgba(236,72,153,.25));
-      border:1px solid rgba(236,72,153,.35);border-radius:999px;padding:6px 10px;box-shadow:inset 0 0 18px rgba(139,92,246,.25),0 0 22px rgba(236,72,153,.25)
+    .badge{
+      position:absolute;top:-8px;right:-8px;background:#10b981;color:#fff;border-radius:999px;font-size:.75rem;padding:2px 7px;
+      border:2px solid rgba(15,23,42,.8)
     }
+    #toTop{
+      position:fixed;right:12px;bottom:calc(max(64px, env(safe-area-inset-bottom)) + 12px);z-index:850;display:none;
+      background:rgba(30,41,59,.85);border:1px solid rgba(99,102,241,.35);color:#fff;border-radius:12px;padding:10px 12px
+    }
+    #toTop.show{display:block}
+
+    /* --- Inputs --- */
+    .contact-input{
+      width:100%;background:rgba(30,41,59,.7);border:1px solid rgba(99,102,241,.24);color:#fff;
+      padding:14px 14px;border-radius:12px;transition:.2s
+    }
+    .contact-input:focus{outline:none;border-color:var(--secondary);box-shadow:0 0 0 3px rgba(139,92,246,.22)}
+
+    /* --- Notification toast --- */
+    .notification{position:fixed;right:18px;bottom:24px;background:linear-gradient(90deg,#10b981,#06b6d4);color:#fff;
+      padding:12px 16px;border-radius:12px;transform:translateY(140%);transition:.4s;z-index:1000;box-shadow:0 10px 24px rgba(0,0,0,.25);font-weight:600}
+    .notification.show{transform:translateY(0)}
+
+    /* --- Reveal on scroll --- */
+    .reveal{opacity:0;transform:translateY(10px);transition:opacity .5s ease, transform .5s ease}
+    .reveal.in{opacity:1;transform:none}
+
     @media(max-width:768px){
       .song-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-      .guitar-icon{width:40px;height:40px}
-      .song-title{font-size:.95rem}.song-artist{font-size:.84rem}.header-title{font-size:2.1rem}
+      @media (max-width:380px){
+        .song-grid{grid-template-columns:repeat(1,minmax(0,1fr))}
+      }
+      .guitar-icon{width:42px;height:42px}
+      .song-title{font-size:1rem}.song-artist{font-size:.9rem}.header-title{font-size:2.1rem}
     }
   </style>
 </head>
-<body class="py-8">
-  <div class="container mx-auto px-4 max-w-6xl">
-    <header class="mb-10 text-center">
-      <div class="flex justify-center mb-6">
-        <div class="glass p-5 rounded-2xl shadow-xl inline-flex">
-          <div class="bg-gradient-to-r from-indigo-600 to-purple-600 p-5 rounded-full">
-            <i class="fas fa-guitar text-white text-4xl"></i>
+
+<body class="pb-28">
+  <div class="relative overflow-hidden">
+    <!-- Animated aura shapes -->
+    <div class="pointer-events-none absolute -top-24 -left-24 w-72 h-72 rounded-full blur-3xl opacity-30"
+         style="background:radial-gradient(circle at 30% 30%, #8b5cf6 0%, transparent 60%)"></div>
+    <div class="pointer-events-none absolute -bottom-16 -right-16 w-80 h-80 rounded-full blur-3xl opacity-30"
+         style="background:radial-gradient(circle at 70% 70%, #ec4899 0%, transparent 60%)"></div>
+
+    <div class="container mx-auto px-4 max-w-7xl">
+      <!-- HEADER -->
+      <header class="pt-10 md:pt-14 mb-8 text-center">
+        <div class="flex justify-center mb-6">
+          <div class="glass p-5 rounded-2xl shadow-xl inline-flex">
+            <div class="bg-gradient-to-r from-indigo-600 to-purple-600 p-5 rounded-full">
+              <i class="fas fa-guitar text-white text-4xl"></i>
+            </div>
           </div>
         </div>
+        <h1 class="header-title mb-2">Сборник лучших песен</h1>
+        <p class="opacity-80 max-w-2xl mx-auto">Выбирайте треки, фильтруйте по исполнителю, добавляйте в корзину и отправляйте заявку прямо в Telegram.</p>
+      </header>
+
+      <!-- ARTISTS FILTER (sticky) -->
+      <section class="glass-strong rounded-3xl shadow-2xl p-5 md:p-6 mb-8 sticky z-30" style="top: max(6px, env(safe-area-inset-top))">
+        <div class="flex items-center justify-between gap-4 flex-wrap">
+          <div class="flex items-center gap-3">
+            <span class="font-extrabold text-lg" style="font-family:'Montserrat',sans-serif">
+              Исполнители
+            </span>
+            <span id="artistMeta" class="text-xs opacity-75"></span>
+          </div>
+          <div class="flex items-center gap-2 w-full md:w-auto">
+            <div class="relative flex-1">
+              <span class="search-icon"><i class="fa-solid fa-user"></i></span>
+              <input id="artistSearch" class="search-box" placeholder="Быстрый поиск исполнителя…">
+              <span id="artistSearchClear" class="clear-search hidden"><i class="fas fa-times"></i></span>
+            </div>
+            <button id="artistClear" class="px-3 py-2 rounded-xl bg-slate-700/70 hover:bg-slate-600 transition text-sm">
+              Сбросить
+            </button>
+          </div>
+        </div>
+        <div id="artistChips" class="chips-wrap mt-4 flex gap-2 py-2"></div>
+      </section>
+
+      <!-- TEXT SEARCH -->
+      <div class="max-w-2xl mx-auto mb-8 relative">
+        <span class="search-icon"><i class="fas fa-search"></i></span>
+        <input id="search-input" class="search-box" placeholder="Поиск по названию или артисту...">
+        <span id="clear-search" class="clear-search hidden"><i class="fas fa-times"></i></span>
       </div>
-      <h1 class="header-title mb-2">Сборник лучших песен</h1>
-      <p class="opacity-80 max-w-2xl mx-auto">Выбирайте треки, добавляйте в корзину и отправляйте заявку прямо в Telegram.</p>
-    </header>
 
-```Plain Text
-<div class="max-w-2xl mx-auto mb-8 relative">
-  <span class="search-icon"><i class="fas fa-search"></i></span>
-  <input id="search-input" class="search-box" placeholder="Поиск по названию или артисту...">
-  <span id="clear-search" class="clear-search hidden"><i class="fas fa-times"></i></span>
-</div>
+      <!-- SONGS -->
+      <section class="glass rounded-3xl shadow-2xl p-6">
+        <div class="mb-6 text-center">
+          <h2 class="font-extrabold text-xl md:text-2xl inline-block pb-2 relative" style="font-family:'Montserrat',sans-serif">
+            Список песен
+          </h2>
+          <div class="mt-2 text-sm opacity-80">
+            Отсортировано по артистам: А–Я, затем A–Z • Всего: <b id="totalCount">0</b> • Показано: <b id="shownCount">0</b>
+          </div>
+        </div>
 
-<!-- СПИСОК -->
-<section class="glass rounded-3xl shadow-2xl p-6">
-  <div class="mb-6 text-center">
-    <h2 class="font-extrabold text-xl md:text-2xl inline-block pb-2 relative" style="font-family:'Montserrat',sans-serif">
-      Список песен
-    </h2>
-    <div class="mt-2 text-sm opacity-80">
-      Отсортировано по артистам: А–Я, затем A–Z • Всего: <b id="totalCount">0</b>
+        <div id="song-list" class="song-grid"></div>
+        <div id="no-results" class="text-center opacity-80 py-8 hidden">
+          <i class="fa-regular fa-face-sad-tear text-2xl mb-2"></i>
+          <div>Ничего не найдено…</div>
+        </div>
+        <div id="sentinel" class="text-center text-sm opacity-70 py-6 hidden">Загружаем ещё…</div>
+      </section>
+
+      <!-- CART -->
+      <section id="cartSection" class="glass rounded-3xl shadow-2xl p-6 mt-10 hidden border-t-4 border-indigo-500">
+        <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
+          <div class="flex items-center gap-3">
+            <span class="chip"><i class="fa-solid fa-basket-shopping mr-1"></i> В корзине: <b id="cartCount">0</b></span>
+          </div>
+          <div class="flex gap-2">
+            <button id="copyBtn" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 transition">Скопировать список</button>
+            <button id="clearBtn" class="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 transition">Очистить</button>
+          </div>
+        </div>
+
+        <div id="cartList" class="grid md:grid-cols-2 gap-3"></div>
+
+        <!-- ORDER FORM -->
+        <form id="orderForm" class="mt-8 grid md:grid-cols-2 gap-4">
+          <input class="contact-input" id="buyerName" placeholder="Ваше имя"/>
+          <input class="contact-input" id="buyerContact" placeholder="Контакт (Telegram @ник, телефон или WhatsApp)"/>
+          <textarea class="contact-input md:col-span-2" id="buyerComment" rows="3" placeholder="Комментарий (по желанию)"></textarea>
+          <button id="sendOrder" type="submit" class="md:col-span-2 px-5 py-3 rounded-xl font-semibold text-white
+            bg-gradient-to-r from-fuchsia-600 via-purple-600 to-indigo-600 hover:opacity-95 transition shadow-lg">
+            <i class="fa-regular fa-paper-plane mr-2"></i>Отправить заявку на покупку песен
+          </button>
+          <div class="text-xs opacity-70 md:col-span-2">Заявка приходит в Telegram. Мы свяжемся с вами для подтверждения.</div>
+        </form>
+      </section>
     </div>
   </div>
 
-  <div id="song-list" class="song-grid"></div>
-  <div id="no-results" class="no-results hidden py-8">
-    <i class="fa-regular fa-face-sad-tear text-2xl mb-2"></i>
-    <div>Ничего не найдено…</div>
-  </div>
-</section>
+  <!-- Floating cart button -->
+  <button id="toCartFloating" class="relative">
+    <i class="fa-solid fa-cart-shopping mr-2"></i>
+    <span>Перейти к корзине</span>
+    <span id="floatBadge" class="badge hidden">0</span>
+  </button>
 
-<!-- КОРЗИНА -->
-<section id="cartSection" class="glass rounded-3xl shadow-2xl p-6 mt-10 hidden cart-container">
-  <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
-    <div class="flex items-center gap-3">
-      <span class="neon-chip"><i class="fa-solid fa-basket-shopping mr-1"></i> В корзине: <b id="cartCount">0</b></span>
-    </div>
-    <div class="flex gap-2">
-      <button id="copyBtn" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 transition">Скопировать список</button>
-      <button id="clearBtn" class="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 transition">Очистить</button>
-    </div>
-  </div>
+  <!-- Back to top -->
+  <button id="toTop" title="Наверх"><i class="fa-solid fa-arrow-up"></i></button>
 
-  <div id="cartList" class="grid md:grid-cols-2 gap-3"></div>
-
-  <!-- ФОРМА ЗАЯВКИ -->
-  <form id="orderForm" class="mt-8 grid md:grid-cols-2 gap-4">
-    <input class="contact-input" id="buyerName" placeholder="Ваше имя"/>
-    <input class="contact-input" id="buyerContact" placeholder="Контакт (Telegram @ник, телефон или WhatsApp)"/>
-    <textarea class="contact-input md:col-span-2" id="buyerComment" rows="3" placeholder="Комментарий (по желанию)"></textarea>
-    <button id="sendOrder" type="submit" class="md:col-span-2 px-5 py-3 rounded-xl font-semibold text-white
-      bg-gradient-to-r from-fuchsia-600 via-purple-600 to-indigo-600 hover:opacity-95 transition shadow-lg">
-      <i class="fa-regular fa-paper-plane mr-2"></i>Отправить заявку на покупку песен
-    </button>
-    <div class="text-xs opacity-70 md:col-span-2">Заявка приходит в Telegram. Мы свяжемся с вами для подтверждения.</div>
-  </form>
-</section>
-```
-
-
-  </div>
-
-  <!-- Плавающая кнопка -->
-
-<button id="toCartFloating"><i class="fa-solid fa-cart-shopping mr-2"></i><span>Перейти к корзине</span></button>
-
-  <!-- Уведомление -->
-
+  <!-- Toast -->
   <div id="notify" class="notification"><i class="fa-solid fa-check mr-2"></i><span></span></div>
 
   <script>
-  // ========= СЫРОЙ СПИСОК (вставляй сюда новые строки «Артист — Песня») =========
+  // ================== RAW LIST ==================
   const RAW_LIST = `
 Би-2 — Мы не ангелы, парень
 Бортпроводник — Давай сбежим
@@ -560,29 +662,71 @@ Xolidayboy — Океаны
 Xolidayboy — Пожары
 `;
 
-  // ========= НАСТРОЙКИ TG =========
+  // ================== TELEGRAM SETTINGS ==================
   const BOT_TOKEN = "7598736914:AAHVJUOt7okTfMh1VE_l1ZrCqaXv-r1PcWI";
   const CHAT_ID  = "725158536";
 
-  // ========= УТИЛИТЫ =========
+  // ================== UTILS ==================
   const $ = (s, r=document)=>r.querySelector(s);
   const $$ = (s, r=document)=>Array.from(r.querySelectorAll(s));
   const normRu = s => (s||'').toString().toLowerCase().replace(/ё/g,'е').trim();
+  const asciiApos = s => (s||'').replace(/[’`]/g,"'");
 
-  // алиасы артистов для дедупликации опечаток
-  const ARTIST_ALIASES = {
-    'HENSY':'Hensy',
-    'Круга Михаил':'Михаил Круг',
-    'Круг Михаил':'Михаил Круг',
-    'Юля Ким':'Юлий Ким',
-    'Дabro':'Dabro',
-    'Дабро (Dabro)':'Dabro'
+  // Алиасы/нормализация артистов (ключ — нормализованный)
+  const ALIAS = new Map([
+    ["hensy","Hensy"],
+    ["круга михаил","Михаил Круг"],["круг михаил","Михаил Круг"],
+    ["юля ким","Юлий Ким"],
+    ["дабро (dabro)","Dabro"],["дabro","Dabro"],
+    ["валерий кипелов","Ария"],
+    ["виктор цой","Кино"],
+    ["наутилус","Наутилус Помпилиус"],
+    ["песни из кино","Песни из кино и мультфильмов"],
+    ["чиж","Чиж & Co"],
+    ["пятница","5'nizza"],
+    ["5’nizza","5'nizza"],
+    ["miyagi & эндшпиль feat. nerak","Miyagi & Эндшпиль"],
+    ["miyagi & эндшпиль","Miyagi & Эндшпиль"],
+    ["miyagi & andy panda","Miyagi & Эндшпиль"],
+    ["miyagi & andy panda","Miyagi & Эндшпиль"],
+    ["miYagi & andy panda".toLowerCase(),"Miyagi & Эндшпиль"]
+  ]);
+
+  const DONT_SPLIT_AMP = new Set(["Miyagi & Эндшпиль","Чиж & Co"]);
+
+  const cleanName = s => asciiApos(normRu(s)).replace(/\s+/g,' ').trim();
+
+  const applyAlias = (name) => {
+    const key = cleanName(name);
+    return ALIAS.get(key) || name.trim();
   };
+
+  // Разбиваем совместных артистов на массив для фильтра (Клава Кока, Hensy)
+  function splitArtists(raw){
+    const aliasedWhole = applyAlias(raw);
+    if (DONT_SPLIT_AMP.has(aliasedWhole)) return [aliasedWhole];
+
+    // Разделители: запятая, feat/ft, x
+    let parts = raw.split(/\s*,\s*|\s+feat\.?\s+|\s+ft\.?\s+|\s+x\s+/i);
+    // Если остался амперсанд и это не «Чиж & Co»/«Miyagi & Эндшпиль», разделим по нему
+    if (parts.length === 1 && !DONT_SPLIT_AMP.has(aliasedWhole) && /\s&\s/.test(raw)) {
+      parts = raw.split(/\s&\s/);
+    }
+    const mapped = [...new Set(parts.map(p=>applyAlias(p)))].filter(Boolean);
+    // Если всё равно ничего не вышло — вернём алиас целиком
+    return mapped.length ? mapped : [aliasedWhole];
+  }
+
+  // Приводим весь artist к каноническому виду (включая совместки)
+  function canonicalArtist(raw){
+    const arr = splitArtists(raw);
+    return arr.join(', ');
+  }
 
   // Парсинг и очистка
   function parseSongs(raw){
     const lines = raw.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
-    const skipByPhrase = (s) => /пропуск|если есть/i.test(s) || /см\./i.test(s) || /см\s/i.test(s) || /Дукатура/i.test(s) || /^Гречки\s+—/i.test(s);
+    const skipByPhrase = (s) => /пропуск|если есть/i.test(s) || /см\./i.test(s) || /см\s/i.test(s) || /Дукатура/i.test(s);
     const songs = [];
     const seen = new Set();
 
@@ -590,35 +734,30 @@ Xolidayboy — Пожары
       if(!line.includes('—')) continue;
       if(skipByPhrase(line)) continue;
 
-      // artist — title (делим по первому тире)
       const firstDash = line.indexOf('—');
       let artist = line.slice(0, firstDash).trim();
       let title  = line.slice(firstDash+1).trim();
 
-      // убрать содержимое в скобках у названия (капо/упр/вариант и т.п.)
       title = title.replace(/\([^)]*\)/g,'').replace(/\s{2,}/g,' ').trim();
       artist = artist.replace(/\([^)]*\)/g,'').trim();
-
-      // нормализация некоторых пунктуаций внутри названия для дедупликации
       title = title.replace(/(\d)\s*[:]\s*(\d)/g,'$1-$2'); // 5:0 -> 5-0
 
-      // алиасы артистов
-      if(ARTIST_ALIASES[artist]) artist = ARTIST_ALIASES[artist];
+      // применяем канон
+      const displayArtist = canonicalArtist(artist);
+      const artistList = splitArtists(artist);
 
-      // ключ (без ё/Ё, регистр не учитываем)
-      const key = normRu(artist)+'—'+normRu(title);
+      const key = normRu(displayArtist)+'—'+normRu(title);
       if(seen.has(key)) continue;
       seen.add(key);
 
-      // пропускаем пустые после чистки
-      if(!artist || !title) continue;
+      if(!displayArtist || !title) continue;
 
-      songs.push({artist, title});
+      songs.push({artist: displayArtist, title, artists: artistList});
     }
     return songs;
   }
 
-  // Сортировка: сначала кириллица, потом латиница; далее артист, затем трек
+  // Сортировка: кириллица → латиница; затем артист, затем трек
   const isCyr = s => /^[а-яё]/i.test(s||'');
   function sortSongs(arr){
     return arr.sort((a,b)=>{
@@ -630,9 +769,10 @@ Xolidayboy — Пожары
     });
   }
 
-  // ========= РЕНДЕР =========
+  // ================== STATE/REFS ==================
   const songList = $('#song-list');
   const totalCountEl = $('#totalCount');
+  const shownCountEl = $('#shownCount');
   const searchInput = $('#search-input');
   const clearSearch = $('#clear-search');
   const cartSection = $('#cartSection');
@@ -640,25 +780,42 @@ Xolidayboy — Пожары
   const cartCount = $('#cartCount');
   const notify = $('#notify');
   const toCartFloating = $('#toCartFloating');
+  const floatBadge = $('#floatBadge');
+  const toTopBtn = $('#toTop');
+  const sentinel = $('#sentinel');
+
+  const artistChips = $('#artistChips');
+  const artistSearch = $('#artistSearch');
+  const artistSearchClear = $('#artistSearchClear');
+  const artistClear = $('#artistClear');
+  const artistMeta = $('#artistMeta');
 
   const ALL_SONGS = sortSongs(parseSongs(RAW_LIST));
   totalCountEl.textContent = ALL_SONGS.length;
 
   const selected = new Map(); // key -> {title, artist}
+  let q = '';                 // text search
+  let artistFilter = '';      // current artist filter
 
-  function renderSongs(filter=''){
-    songList.innerHTML = '';
-    const n = normRu(filter);
-    let shown = 0;
+  // Виртуализация списка
+  let filteredCache = [];
+  let visibleLimit = 0;
+  const BATCH = 80; // шаг подгрузки (мобильный-friendly)
 
-    ALL_SONGS.forEach((s, idx)=>{
-      const hit = !n || normRu(s.title).includes(n) || normRu(s.artist).includes(n);
-      if(!hit) return;
+  function computeFiltered(){
+    const n = normRu(q);
+    return ALL_SONGS.filter(s=>{
+      const hitSearch = !n || normRu(s.title).includes(n) || normRu(s.artist).includes(n);
+      const hitArtist = !artistFilter || s.artists.includes(artistFilter);
+      return hitSearch && hitArtist;
+    });
+  }
 
-      shown++;
+  function renderChunk(start, end){
+    for (let i=start;i<end;i++){
+      const s = filteredCache[i]; if(!s) break;
       const card = document.createElement('div');
-      card.className = 'song-item';
-      card.dataset.id = idx+1;
+      card.className = 'song-item reveal';
       card.dataset.title = s.title;
       card.dataset.artist = s.artist;
       card.innerHTML = `
@@ -668,14 +825,98 @@ Xolidayboy — Пожары
             <div class="song-title">${s.title}</div>
             <div class="song-artist">${s.artist}</div>
           </div>
-        </div>`;
+        </div>
+        <div class="absolute right-2 top-2 opacity-80">${selected.has(`${s.title}::${s.artist}`)?'<i class="fa-solid fa-check text-emerald-400"></i>':''}</div>
+      `;
       card.addEventListener('click', ()=>toggleSelect(card));
       songList.appendChild(card);
-    });
-
-    $('#no-results').classList.toggle('hidden', shown>0);
+    }
   }
 
+  function renderSongs(){
+    songList.innerHTML = '';
+    filteredCache = computeFiltered();
+    visibleLimit = Math.min(BATCH, filteredCache.length);
+    renderChunk(0, visibleLimit);
+
+    $('#no-results').classList.toggle('hidden', filteredCache.length>0);
+    shownCountEl.textContent = Math.min(visibleLimit, filteredCache.length);
+
+    // highlight search matches
+    const nn = normRu(q);
+    if(nn){
+      $$('.song-item').forEach(el=>{
+        const tEl = el.querySelector('.song-title'), aEl = el.querySelector('.song-artist');
+        const t = el.dataset.title, a = el.dataset.artist;
+        const paint = src=>{
+          const srcN = normRu(src); const i = srcN.indexOf(nn);
+          if(i<0) return src;
+          return src.substring(0,i) + '<span class="highlight">'+ src.substring(i, i+q.length) +'</span>' + src.substring(i+q.length);
+        };
+        tEl.innerHTML = paint(t); aEl.innerHTML = paint(a);
+      });
+    }
+
+    sentinel.classList.toggle('hidden', visibleLimit>=filteredCache.length);
+    revealObserve();
+  }
+
+  // Подгрузка по пересечению sentinel
+  const loadObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting && visibleLimit < filteredCache.length){
+        const next = Math.min(visibleLimit + BATCH, filteredCache.length);
+        renderChunk(visibleLimit, next);
+        visibleLimit = next;
+        shownCountEl.textContent = visibleLimit;
+        sentinel.classList.toggle('hidden', visibleLimit>=filteredCache.length);
+        revealObserve();
+      }
+    });
+  },{root:null,threshold:0.01});
+  loadObserver.observe(sentinel);
+
+  // ================== ARTISTS CHIPS ==================
+  const ARTISTS = (()=> {
+    const set = new Set();
+    ALL_SONGS.forEach(s=>s.artists.forEach(a=>set.add(a)));
+    return Array.from(set).sort((a,b)=>{
+      const aC = isCyr(a), bC = isCyr(b);
+      if(aC!==bC) return aC? -1 : 1;
+      return a.toLocaleLowerCase('ru').localeCompare(b.toLocaleLowerCase('ru'),'ru');
+    });
+  })();
+
+  function renderArtistChips(filterText=''){
+    artistChips.innerHTML = '';
+    const needle = normRu(filterText);
+    let list = ARTISTS.filter(a => !needle || normRu(a).includes(needle));
+
+    artistMeta.textContent = `Всего исполнителей: ${ARTISTS.length}${needle ? ` • найдено: ${list.length}`:''}`;
+
+    list.forEach(name=>{
+      const btn = document.createElement('button');
+      btn.className = 'chip text-sm';
+      btn.textContent = name;
+      btn.setAttribute('title', `Показать песни: ${name}`);
+      if(name === artistFilter) btn.classList.add('active');
+      btn.addEventListener('click', ()=>{
+        artistFilter = (artistFilter === name) ? '' : name;
+        $$('.chip', artistChips).forEach(c=>c.classList.remove('active'));
+        if(artistFilter){
+          btn.classList.add('active');
+          showNote(`Фильтр: ${artistFilter}`);
+        }else{
+          showNote('Фильтр исполнителя сброшен');
+        }
+        renderSongs();
+        document.getElementById('song-list').scrollIntoView({behavior:'smooth', block:'start'});
+      });
+      artistChips.appendChild(btn);
+    });
+  }
+
+  // ================== CART ==================
   function toggleSelect(el){
     const key = `${el.dataset.title}::${el.dataset.artist}`;
     if(selected.has(key)){
@@ -686,6 +927,8 @@ Xolidayboy — Пожары
       el.classList.add('selected');
     }
     renderCart();
+    const checkSlot = el.querySelector('.absolute.right-2.top-2');
+    checkSlot.innerHTML = selected.has(key) ? '<i class="fa-solid fa-check text-emerald-400"></i>' : '';
   }
 
   function renderCart(){
@@ -694,6 +937,8 @@ Xolidayboy — Пожары
     cartCount.textContent = arr.length;
     cartSection.classList.toggle('hidden', arr.length===0);
     toCartFloating.classList.toggle('show', arr.length>0);
+    floatBadge.textContent = arr.length;
+    floatBadge.classList.toggle('hidden', arr.length===0);
 
     arr.forEach(({title,artist})=>{
       const row = document.createElement('div');
@@ -723,31 +968,43 @@ Xolidayboy — Пожары
     setTimeout(()=>notify.classList.remove('show'), 1600);
   }
 
-  // Поиск
-  let q = '';
+  // ================== SEARCH ==================
   searchInput.addEventListener('input', ()=>{
     q = searchInput.value;
     clearSearch.classList.toggle('hidden', !q.length);
-    renderSongs(q);
-    // подсветка
-    const n = normRu(q);
-    $$('.song-item').forEach(el=>{
-      const tEl = el.querySelector('.song-title'), aEl = el.querySelector('.song-artist');
-      const t = el.dataset.title, a = el.dataset.artist;
-      if(!n){ tEl.textContent=t; aEl.textContent=a; return; }
-      const paint = src=>{
-        const srcN = normRu(src); const i = srcN.indexOf(n);
-        if(i<0) return src;
-        return src.substring(0,i) + '<span class="highlight">'+ src.substring(i, i+q.length) +'</span>' + src.substring(i+q.length);
-      };
-      tEl.innerHTML = paint(t); aEl.innerHTML = paint(a);
-    });
+    renderSongs();
   });
   clearSearch.addEventListener('click', ()=>{
-    searchInput.value=''; q=''; clearSearch.classList.add('hidden'); renderSongs('');
+    searchInput.value=''; q='';
+    clearSearch.classList.add('hidden'); renderSongs();
   });
 
-  // Кнопки корзины
+  // ================== ARTIST SEARCH/CLEAR ==================
+  artistSearch.addEventListener('input', ()=>{
+    const v = artistSearch.value;
+    artistSearchClear.classList.toggle('hidden', !v.length);
+    renderArtistChips(v);
+  });
+  artistSearchClear.addEventListener('click', ()=>{
+    artistSearch.value=''; artistSearchClear.classList.add('hidden'); renderArtistChips('');
+  });
+  artistClear.addEventListener('click', ()=>{
+    artistFilter = '';
+    artistSearch.value = ''; artistSearchClear.classList.add('hidden');
+    renderArtistChips('');
+    renderSongs();
+  });
+
+  // Горизонтальный скролл чипов — свайпом
+  (()=>{
+    let isDown=false,startX,scrollLeft;
+    artistChips.addEventListener('mousedown',e=>{isDown=true;artistChips.classList.add('cursor-grabbing');startX=e.pageX-artistChips.offsetLeft;scrollLeft=artistChips.scrollLeft;});
+    artistChips.addEventListener('mouseleave',()=>{isDown=false;artistChips.classList.remove('cursor-grabbing');});
+    artistChips.addEventListener('mouseup',()=>{isDown=false;artistChips.classList.remove('cursor-grabbing');});
+    artistChips.addEventListener('mousemove',e=>{if(!isDown)return;e.preventDefault();const x=e.pageX-artistChips.offsetLeft;const walk=(x-startX);artistChips.scrollLeft=scrollLeft-walk;});
+  })();
+
+  // ================== CART BUTTONS ==================
   $('#copyBtn').addEventListener('click', async ()=>{
     const text = Array.from(selected.values()).map(s=>`${s.title} — ${s.artist}`).join('\n');
     if(!text){ showNote('Список пуст'); return; }
@@ -756,13 +1013,20 @@ Xolidayboy — Пожары
   });
   $('#clearBtn').addEventListener('click', ()=>{
     selected.clear(); $$('.song-item').forEach(el=>el.classList.remove('selected'));
-    renderCart(); showNote('Список очищен');
+    renderCart(); renderSongs(); showNote('Список очищен');
   });
   toCartFloating.addEventListener('click', ()=>{
     document.getElementById('cartSection').scrollIntoView({behavior:'smooth', block:'start'});
   });
 
-  // Отправка в Telegram
+  // Кнопка "Наверх"
+  window.addEventListener('scroll', ()=>{
+    const y = window.scrollY || document.documentElement.scrollTop;
+    toTopBtn.classList.toggle('show', y>600);
+  });
+  toTopBtn.addEventListener('click', ()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+  // ================== TELEGRAM SUBMIT ==================
   $('#orderForm').addEventListener('submit', async (e)=>{
     e.preventDefault();
     const arr = Array.from(selected.values());
@@ -786,21 +1050,36 @@ ${list}`;
       const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,{
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({chat_id: "${CHAT_ID}", text, parse_mode:'HTML'})
+        body: JSON.stringify({chat_id: CHAT_ID, text, parse_mode:'HTML'})
       });
       if(!res.ok) throw new Error('TG error');
       showNote('Заявка отправлена!');
     }catch(err){
-      const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${encodeURIComponent("${CHAT_ID}")}&parse_mode=HTML&text=${encodeURIComponent(text)}`;
+      const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${encodeURIComponent(CHAT_ID)}&parse_mode=HTML&text=${encodeURIComponent(text)}`;
       window.open(url,'_blank');
       showNote('Открыли Telegram для отправки');
     }
   });
 
-  // Init
-  renderSongs('');
-  </script>
+  // ================== REVEAL ANIMATIONS ==================
+  let io;
+  function revealObserve(){
+    if(io) io.disconnect();
+    io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    },{threshold:0.06});
+    $$('.reveal', songList).forEach(el=>io.observe(el));
+  }
 
+  // ================== INIT ==================
+  renderArtistChips('');
+  renderSongs();
+
+  </script>
 </body>
 </html>
-
